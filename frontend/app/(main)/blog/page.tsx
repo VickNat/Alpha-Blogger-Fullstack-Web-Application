@@ -1,11 +1,11 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from "@/components/ui/input"
 import BlogsSection from '@/components/BlogsSection'
 import BlogsBackgroundImageSection from '@/components/BlogsBackgroundImageSection'
 
-const page = () => {
-  const [search, setSearch] = React.useState('')
+const Page = () => {
+  const [search, setSearch] = useState('')
 
   console.log("Search", search);
 
@@ -23,4 +23,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

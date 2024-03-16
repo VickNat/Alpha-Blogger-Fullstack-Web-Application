@@ -38,11 +38,11 @@ async function getUser(req, res, next) {
 // login user
 router.post('/login', async (req, res) => {
   try {
-    const user = await User.findOne({ email: "natiAshe@gmail.com" });
+    const user = await User.findOne({ email: req.body.email });
     if (user == null) {
       return res.status(400).json({ message: 'Cannot find user' });
     }
-    if (user.password !== "P@ssw0rd") {
+    if (user.password !== req.body.password) {
       return res.status(400).json({ message: 'Invalid password' });
     }
     res.json({ message: 'User logged in', user });
@@ -56,12 +56,12 @@ router.post('/login', async (req, res) => {
 // Create one user
 router.post('/', async (req, res) => {
   const user = new User({
-    name: "Test User",
-    email: "test@gmail.com",
-    password: "P@ssw0rd"
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
   });
 
-  const existingUser = await User.findOne({ email: "test@gmail.com" });
+  const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {
     return res.status(400).json({ message: 'User already exists' });
   }

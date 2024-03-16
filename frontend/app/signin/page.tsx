@@ -27,7 +27,7 @@ const SignIn = () => {
       <div className='flex flex-col h-screen justify-center items-center lg:items-start lg:justify-start lg:pl-32 lg:pt-24 lg:w-1/2 gap-y-6'>
         <div>
           <h1 className='text-3xl'>Sign in</h1>
-          <p>Don't have an Account? <Link href="/signup" className='underline text-slate-500 hover:text-slate-900' >Login</Link></p>
+          <p>Don&apos;t have an Account? <Link href="/signup" className='underline text-slate-500 hover:text-slate-900' >Login</Link></p>
         </div>
         <form onSubmit={formik.handleSubmit} className='w-full flex flex-col gap-y-4 items-center lg:items-start'>
           <div className='flex flex-col w-8/12 gap-y-1'>

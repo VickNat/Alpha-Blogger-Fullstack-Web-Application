@@ -6,7 +6,7 @@ import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const page = () => {
+const Page = () => {
 
   const formik = useFormik({
     initialValues: {
@@ -91,4 +91,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

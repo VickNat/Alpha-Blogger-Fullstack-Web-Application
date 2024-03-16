@@ -1,11 +1,13 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
 const User = require('../models/usersModel');
 const Blog = require('../models/blogsModel');
 
 const connectDB = async () => {
   try {
-    const databaseName = 'demomern';
-    const connectionString = "mongodb+srv://natanimashenafi20:0utK1EWrl6LuNTVu@cluster0.txiacn5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    const connectionString = process.env.MONGODB_URI;
+
+    console.log("connectionString", connectionString);
     const con = await mongoose.connect(connectionString);
     console.log(`Database connected : ${con.connection.host}`);
 

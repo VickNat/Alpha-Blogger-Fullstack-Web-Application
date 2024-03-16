@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React from 'react'
 
 const page = () => {
@@ -9,7 +10,7 @@ const page = () => {
             <div className="flex flex-wrap justify-center">
               <div className="w-full px-4 flex justify-center">
                 <div className="relative">
-                  <img
+                  <Image
                     alt="..."
                     src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
                     className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
