@@ -8,8 +8,11 @@ import PersonalBlogs from '@/components/PersonalBlogs'
 
 const page = () => {
 
-  const stringifiedUser = localStorage.getItem('user')
-  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
+  let user: any = null;
+  if (typeof window !== 'undefined') {
+    const stringifiedUser = localStorage.getItem('user')
+    user = JSON.parse(stringifiedUser ? stringifiedUser : "null")
+  }
 
   // console.log("User", user);
 

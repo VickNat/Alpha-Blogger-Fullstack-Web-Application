@@ -5,13 +5,15 @@ import Link from 'next/link'
 import axios from 'axios'
 
 const PersonalBlogs = () => {
-  const stringifiedUser = localStorage.getItem('user')
-  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
-
+  let user: any = null;
+  if (typeof window !== 'undefined') {
+    const stringifiedUser = localStorage.getItem('user')
+    user = JSON.parse(stringifiedUser ? stringifiedUser : "null")
+  }
   const [posts, setPosts] = React.useState([])
 
   React.useEffect(() => {
-    axios.get(`https://dev-diaries-9f6n.onrender.com/blog/user/${user._id}`)
+    axios.get(`https://dev-diaries-9f6n.onrender.com/blog/user/${user?._id}`)
       .then(response => {
         setPosts(response.data)
         // console.log("Posts", response.data);

@@ -7,9 +7,11 @@ import logoDark from '../public/Logo Dark.svg'
 import { useRouter } from 'next/navigation'
 
 const Header = () => {
-  const stringifiedUser = localStorage.getItem('user')
-  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
-
+  let user: any = null;
+  if (typeof window !== 'undefined') {
+    const stringifiedUser = localStorage.getItem('user')
+    user = JSON.parse(stringifiedUser ? stringifiedUser : "null")
+  }
   const router = useRouter()
 
   const [isOpen, setIsOpen] = useState(false);

@@ -19,9 +19,11 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 const ProfileCard = () => {
-  const stringifiedUser = localStorage.getItem('user')
-  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
-  // console.log("User", user);
+  let user: any = null;
+  if (typeof window !== 'undefined') {
+    const stringifiedUser = localStorage.getItem('user')
+    user = JSON.parse(stringifiedUser ? stringifiedUser : "null")
+  }
 
   const router = useRouter()
 

@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation'
 const Page = () => {
   const router = useRouter()
 
-  if (localStorage.getItem('user')) {
+  if (typeof window !== 'undefined' && window.localStorage.getItem('user')) {
     router.push('/')
   }
 

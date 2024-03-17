@@ -12,7 +12,7 @@ import axios from 'axios'
 const SignIn = () => {
   const router = useRouter()
 
-  if (localStorage.getItem('user')) {
+  if (typeof window !== 'undefined' && window.localStorage.getItem('user')) {
     router.push('/')
   }
   const BASE_URL = 'https://dev-diaries-9f6n.onrender.com'

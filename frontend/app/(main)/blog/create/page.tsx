@@ -5,20 +5,24 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useFormik } from 'formik'
 import { Button } from "@/components/ui/button"
-import React from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 
 const Page = () => {
-  const stringifiedUser = localStorage.getItem('user')
-  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
-  // console.log("User", user);
+  let user: any = null;
+  if (typeof window !== 'undefined') {
+    const stringifiedUser = localStorage.getItem('user')
+    user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
+  }
 
   const router = useRouter()
 
-  if (!user) {
-    router.push('/signin')
-  }
+  useEffect(() => {
+    if (!user) {
+      router.push('/signin')
+    }
+  }, [user]);
 
   const formik = useFormik({
     initialValues: {
@@ -26,7 +30,7 @@ const Page = () => {
       content: '',
     },
     onSubmit: values => {
-      alert(JSON.stringify(values, null, 2))
+      // alert(JSON.stringify(values, null, 2))
     }
   })
 
@@ -46,7 +50,7 @@ const Page = () => {
       console.log("Response", response);
 
       if (response.status == 200 || response.status == 201) {
-        alert("Blog created successfully");
+        // alert("Blog created successfully");
       }
 
     } catch (error) {
@@ -62,7 +66,7 @@ const Page = () => {
         </Label>
         <Input
           onChange={formik.handleChange}
-          defaultValue={formik.values.headline}
+          defaultValue=""
           id="headline"
           className="col-span-3 dark:bg-slate-700 focus:ring-0"
         />
@@ -73,7 +77,7 @@ const Page = () => {
         </Label>
         <Textarea
           onChange={formik.handleChange}
-          defaultValue={formik.values.content}
+          defaultValue=""
           id="content"
           className="col-span-3 dark:bg-slate-700 focus:ring-0 min-h-80"
         />
