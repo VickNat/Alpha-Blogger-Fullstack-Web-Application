@@ -40,12 +40,19 @@ const ProfileCard = () => {
 
     // send request to server
     try {
-      const response = axios.patch(`https://dev-diaries-9f6n.onrender.com/user/${user?.user?._id}`, {
+      const body = {
         name: formik.values.name ? formik.values.name : user?.user?.name,
         email: formik.values.email ? formik.values.email : user?.user?.email,
         bio: formik.values.bio ? formik.values.bio : user?.user?.bio
-      })
+      }
+
+      console.log("Body", body, user?._id)
+      const response = await axios.patch(`https://dev-diaries-9f6n.onrender.com/user/${user?._id}`, body)
       console.log("Response", response);
+
+      if(response.status == 200 || response.status == 201) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+      }
       
     } catch (error) {
       console.log("Error", error);

@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
 
   try {
     const newUser = await user.save();
-    res.status(201).json(newUser);
+    res.status(201).json({ message: "User created successfully", user: newUser });
     console.log("User created successfully", newUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -94,7 +94,7 @@ router.patch('/:id', getUser, async (req, res) => {
   try {
     const updatedUser = await res.user.save();
     res.json(updatedUser);
-    res.status(200).json({ message: 'User updated', updatedUser });
+    res.status(200).json({ message: 'User updated', user: updatedUser });
     console.log("User updated successfully", updatedUser);
   } catch (error) {
     res.status(400).json({ message: error.message });
