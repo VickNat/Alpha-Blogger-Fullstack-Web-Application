@@ -4,8 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import logoLight from '../public/Logo Light.svg'
 import logoDark from '../public/Logo Dark.svg'
+import { useRouter } from 'next/navigation'
 
 const Header = () => {
+  const stringifiedUser = localStorage.getItem('user')
+  const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
+
+  const router = useRouter()
+
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -41,18 +47,35 @@ const Header = () => {
           >
             <ThemeToggler />
           </div>
-          <Link
-            href="/signin"
-            className="text-gray-800 dark:text-white hover:bg-gray-50  font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:hover:bg-gray-700 focus:outline-none "
-          >
-            Log in
-          </Link>
-          <Link
-            href="/signup"
-            className="text-white bg-blue-700 hover:bg-blue-800  focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none"
-          >
-            Get started
-          </Link>
+          {user?._id ? (
+            <>
+            <Link href={`/user/${user?._id}`}>Profile</Link>
+              <div
+                onClick={() => {
+                  localStorage.removeItem('user')
+                  router.push('/')
+                }}
+                className="cursor-pointer text-gray-800 dark:text-white hover:bg-gray-50  font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:hover:bg-gray-700 focus:outline-none "
+              >
+                Log out
+              </div>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/signin"
+                className="text-gray-800 dark:text-white hover:bg-gray-50  font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:hover:bg-gray-700 focus:outline-none "
+              >
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                className="text-white bg-blue-700 hover:bg-blue-800  focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none"
+              >
+                Get started
+              </Link>
+            </>
+          )}
           <button
             onClick={toggleMenu}
             type="button"
@@ -112,7 +135,7 @@ const Header = () => {
             </li>
             <li>
               <Link
-                href="/"
+                href="/blog/create"
                 className="block py-2 pr-4 pl-3 text-gray-800 rounded lg:bg-transparent lg:text-gray-800 lg:p-0 dark:text-white"
               >
                 Create
@@ -121,7 +144,7 @@ const Header = () => {
           </ul>
         </div>
       </div>
-    </nav>
+    </nav >
   )
 }
 

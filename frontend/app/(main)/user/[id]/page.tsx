@@ -16,7 +16,7 @@ const page = () => {
   return (
     <div className='flex flex-col items-center justify-center gap-y-8 py-10'>
       <ProfileCard />
-      {/* <PersonalBlogs /> */}
+      <PersonalBlogs />
     </div>
   )
 }

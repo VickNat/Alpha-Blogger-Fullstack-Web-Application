@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import landingImage from '@/public/landingImage.svg'
 import axios from 'axios'
 
-const page = ({ params }: { params: { id: string } }) => {
+const Page = ({ params }: { params: { id: string } }) => {
   const [post, setPost] = useState({} as any)
   const [user, setUser] = useState({} as any)
 
@@ -73,4 +73,4 @@ const page = ({ params }: { params: { id: string } }) => {
   )
 }
 
-export default page
+export default Page

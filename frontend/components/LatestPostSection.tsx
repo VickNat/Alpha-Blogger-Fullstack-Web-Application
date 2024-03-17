@@ -24,9 +24,6 @@ const LatestPostSection = () => {
       <h2 className="text-xl text-slate-900 dark:text-white font-semibold ml">Latest Post</h2>
       <div className='grid grid-cols-1 md:grid-cols-3 md:gap-x-8 md:gap-y-8 gap-y-4 justify-items-center '>
         {posts.map((post, index) => {
-          if(index > 8){
-            return null;
-          }
           return (
             <PostCard key={index} post={post} />
           )

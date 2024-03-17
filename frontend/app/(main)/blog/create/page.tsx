@@ -7,11 +7,18 @@ import { useFormik } from 'formik'
 import { Button } from "@/components/ui/button"
 import React from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
-const page = () => {
+const Page = () => {
   const stringifiedUser = localStorage.getItem('user')
   const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
+  // console.log("User", user);
 
+  const router = useRouter()
+
+  if (!user) {
+    router.push('/signin')
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -32,15 +39,16 @@ const page = () => {
       const response = await axios.post(`https://dev-diaries-9f6n.onrender.com/blog`, {
         headline: formik.values.headline,
         content: formik.values.content,
-        // postedBy: user?.
+        postedBy: user?._id,
+        postedOn: new Date(),
+        tags: [{ name: "Technology" }, { name: "Programming" }]
       })
       console.log("Response", response);
 
-      if(response.status == 200 || response.status == 201) {
-        console.log("Blog created successfully");
-        
+      if (response.status == 200 || response.status == 201) {
+        alert("Blog created successfully");
       }
-      
+
     } catch (error) {
       console.log("Error", error);
     }
@@ -66,8 +74,8 @@ const page = () => {
         <Textarea
           onChange={formik.handleChange}
           defaultValue={formik.values.content}
-          id="Content"
-          className="col-span-3 dark:bg-slate-700 focus:ring-0"
+          id="content"
+          className="col-span-3 dark:bg-slate-700 focus:ring-0 min-h-80"
         />
       </div>
       <Button type="submit" className="text-white bg-blue-700 hover:bg-blue-800  focus:ring-blue-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none w-3/12 min-w-12 self-center"
@@ -76,4 +84,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

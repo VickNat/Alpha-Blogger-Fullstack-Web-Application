@@ -16,11 +16,18 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useFormik } from 'formik'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const ProfileCard = () => {
   const stringifiedUser = localStorage.getItem('user')
   const user = JSON.parse(stringifiedUser ? stringifiedUser : "{}")
   // console.log("User", user);
+
+  const router = useRouter()
+
+  if(!user){
+    router.push('/signin')
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -41,19 +48,18 @@ const ProfileCard = () => {
     // send request to server
     try {
       const body = {
-        name: formik.values.name ? formik.values.name : user?.user?.name,
-        email: formik.values.email ? formik.values.email : user?.user?.email,
-        bio: formik.values.bio ? formik.values.bio : user?.user?.bio
+        name: formik.values.name ? formik.values.name : user?.name,
+        email: formik.values.email ? formik.values.email : user?.email,
+        bio: formik.values.bio ? formik.values.bio : user?.bio
       }
 
       console.log("Body", body, user?._id)
       const response = await axios.patch(`https://dev-diaries-9f6n.onrender.com/user/${user?._id}`, body)
-      console.log("Response", response);
+      console.log("Response", response.data);
 
       if(response.status == 200 || response.status == 201) {
         localStorage.setItem('user', JSON.stringify(response.data));
       }
-      
     } catch (error) {
       console.log("Error", error);
     }
@@ -64,7 +70,7 @@ const ProfileCard = () => {
     <div className="mx-auto w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 py-6 gap-y-6">
       <div className="flex flex-col items-center gap-y-3">
         <div className='w-28 h-28 bg-black rounded-full shadow-lg relative overflow-hidden'>
-          {user?.user?.profileImage ? <Image src={user?.image} alt="Profile Image" className="absolute top-0 left-0 w-full h-full object-cover"
+          {user?.profileImage ? <Image src={user?.image} alt="Profile Image" className="absolute top-0 left-0 w-full h-full object-cover"
           /> : <Image
             className="absolute top-0 left-0 w-full h-full object-cover"
             src={landingImage}
@@ -72,13 +78,13 @@ const ProfileCard = () => {
           />}
         </div>
         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-          {user?.user?.name}
+          {user?.name}
         </h5>
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          {user?.user?.email}
+          {user?.email}
         </span>
         <p className='text-md text-gray-600 text-center mx-auto max-w-72 dark:text-gray-200'>
-          {user?.user?.bio ? user?.user?.bio : "This user has not added a bio yet."}
+          {user?.bio ? user?.bio : "This user has not added a bio yet."}
         </p>
         <Dialog>
           <DialogTrigger asChild>
@@ -89,7 +95,7 @@ const ProfileCard = () => {
               <DialogHeader>
                 <DialogTitle>Edit profile</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you're done.
+                  Make changes to your profile here. Click save when you&apos;re done.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
@@ -99,7 +105,7 @@ const ProfileCard = () => {
                   </Label>
                   <Input
                     onChange={formik.handleChange}
-                    defaultValue={user?.user?.name}
+                    defaultValue={user?.name}
                     id="name"
                     className="col-span-3 dark:bg-slate-700 focus:ring-0"
                   />
@@ -112,7 +118,7 @@ const ProfileCard = () => {
                   <Input
                     id="email"
                     onChange={formik.handleChange}
-                    defaultValue={user?.user?.email}
+                    defaultValue={user?.email}
                     className="col-span-3 dark:bg-slate-700 focus:ring-0"
                   />
                 </div>
@@ -121,7 +127,7 @@ const ProfileCard = () => {
                     Your bio
                   </Label>
                   <Textarea placeholder="Type your message here." id='bio' className="col-span-3 dark:bg-slate-700 focus:ring-0" onChange={formik.handleChange}
-                    defaultValue={user?.user?.bio} />
+                    defaultValue={user?.bio} />
                 </div>
               </div>
 

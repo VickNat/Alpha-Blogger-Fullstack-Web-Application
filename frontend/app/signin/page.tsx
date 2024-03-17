@@ -41,7 +41,7 @@ const SignIn = () => {
       console.log('response', response);
   
       if (response.status === 200 || response.status === 201) {
-        localStorage.setItem('user', JSON.stringify(response.data));
+        localStorage.setItem('user', JSON.stringify(response.data.user));
         console.log('user', localStorage.getItem('user'));
         
         router.push('/');
