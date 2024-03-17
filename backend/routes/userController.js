@@ -87,6 +87,9 @@ router.patch('/:id', getUser, async (req, res) => {
   if (req.body.password != null) {
     res.user.password = req.body.password;
   }
+  if (req.body.bio != null) {
+    res.user.bio = req.body.bio;
+  }
 
   try {
     const updatedUser = await res.user.save();
