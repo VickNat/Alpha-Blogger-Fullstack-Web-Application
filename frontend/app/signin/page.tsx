@@ -6,8 +6,16 @@ import { useFormik } from 'formik'
 import Link from 'next/link'
 import '../globals.css'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 const SignIn = () => {
+  const router = useRouter()
+
+  if (localStorage.getItem('user')) {
+    router.push('/')
+  }
+  const BASE_URL = 'https://dev-diaries-9f6n.onrender.com'
 
   const formik = useFormik({
     initialValues: {
@@ -19,6 +27,32 @@ const SignIn = () => {
     }
   })
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // console.log("Form submitted", formik.values);
+  
+    // send request to server
+    try {
+      const response = await axios.post(`${BASE_URL}/user/login`, {
+        email: formik.values.email,
+        password: formik.values.password
+      });
+  
+      console.log('response', response);
+  
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        console.log('user', localStorage.getItem('user'));
+        
+        router.push('/');
+      }
+  
+    } catch (error) {
+      console.log('error', error);
+      alert('Error signing in');
+    }
+  }
+
   return (
     <div className='flex lg:flex-row flex-col'>
       <div className='h-screen w-1/2 overflow-hidden lg:block hidden'>
@@ -29,7 +63,7 @@ const SignIn = () => {
           <h1 className='text-3xl'>Sign in</h1>
           <p>Don&apos;t have an Account? <Link href="/signup" className='underline text-slate-500 hover:text-slate-900' >Login</Link></p>
         </div>
-        <form onSubmit={formik.handleSubmit} className='w-full flex flex-col gap-y-4 items-center lg:items-start'>
+        <form onSubmit={(e) => handleSubmit(e)} className='w-full flex flex-col gap-y-4 items-center lg:items-start'>
           <div className='flex flex-col w-8/12 gap-y-1'>
             <label htmlFor="email" className='text-slate-600'>Email:</label>
             <input

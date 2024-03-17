@@ -1,30 +1,73 @@
-import Image from 'next/image'
-import React from 'react'
-import landingImage from '@/public/landingImage.svg'
+'use client'
 
-const page = () => {
+import Image from 'next/image'
+import React, { useEffect, useState } from 'react'
+import landingImage from '@/public/landingImage.svg'
+import axios from 'axios'
+
+const page = ({ params }: { params: { id: string } }) => {
+  const [post, setPost] = useState({} as any)
+  const [user, setUser] = useState({} as any)
+
+  // console.log("Params", params.id);
+
+  // console.log("HELLOOOO");
+
+  // fetch blog info and user info
+  useEffect(() => {
+    axios.get(`https://dev-diaries-9f6n.onrender.com/blog/${params.id}`)
+      .then(response => {
+        // console.log("Post", response.data);
+        setPost(response.data)
+      })
+      .catch(error => console.log(error))
+  }, [])
+
+  //Get user from poster id
+  useEffect(() => {
+    axios.get(`https://dev-diaries-9f6n.onrender.com/user/${post?.postedBy}`)
+      .then(response => {
+        // console.log("User", response.data);
+        setUser(response.data)
+      })
+      .catch(error => console.log(error))
+  }, [post])
+
   return (
     <div className='mx-auto max-w-screen-md py-10 flex flex-col gap-y-5'>
       <div className='flex flex-col gap-y-5'>
-        <p className='bg-blue-100 text-blue-500 dark:bg-blue-600 dark:text-white font-semibold py-1 px-4 max-w-28 rounded-lg'>
-          Technology
-        </p>
+        <div className='flex flex-wrap justify-start gap-x-2 gap-y-2'>
+          {post?.tags?.map((tag: any, index: number) => (
+            <p key={index} className='bg-blue-100 text-blue-500 dark:bg-blue-600 dark:text-white font-semibold py-1 px-4 rounded-lg'>
+              {tag?.name}
+            </p>
+          ))}
+        </div>
 
         <h2 className='md:text-3xl text-2xl font-semibold text-black dark:text-white'>
-          The Impact of Technology on the Workplace: How Technology is Changing
+          {post?.headline}
         </h2>
 
         <div className='flex items-center gap-x-3 md:gap-x-4'>
           <div className='md:w-14 md:h-14 w-10 h-10 bg-black rounded-full relative overflow-hidden'>
-            <Image src={landingImage} alt='' className='absolute top-0 left-0 w-full h-full object-cover' />
+            {user?.image ? (
+              <Image src={user?.image} alt='' className='absolute top-0 left-0 w-full h-full object-cover' />
+            ) : (
+              <Image src={landingImage} alt='' className='absolute top-0 left-0 w-full h-full object-cover' />
+            )}
           </div>
-          <p className='text-sm text-slate-400'>Lorem, ipsum.</p>
-          <p className='text-sm text-slate-400'>Lorem, ipsum.</p>
+          <p className='text-sm text-slate-400'>{post?.postedOn?.slice(0, 10)}</p>
         </div>
       </div>
-      <Image src={landingImage} alt="" className='h-96 w-auto' />
+      {
+        post?.image ? (
+          <Image src={post?.image} alt='' className='rounded-lg' />
+        ) : (
+          <Image className="rounded-t-lg" src={landingImage} alt="" />
+        )
+      }
       <p className="text-base leading-relaxed dark:text-gray-300">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum repellendus ut deleniti praesentium tempora quas a dicta veritatis natus animi. Deserunt, assumenda alias. Repellat eligendi repudiandae voluptate culpa dolore repellendus, eius quasi sequi quidem dolorem earum debitis, vero magnam ipsa illum nulla obcaecati voluptatibus? Nulla eius vitae illo architecto dolore libero ea eaque, ab fuga corporis dolorem vel modi ad suscipit ipsa et similique? Quis, doloremque asperiores quas nam, optio et reprehenderit nisi autem ipsum enim, earum tempora. Optio, debitis.
+        {post?.content}
       </p>
     </div>
   )

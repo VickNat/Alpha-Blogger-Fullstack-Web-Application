@@ -6,8 +6,14 @@ import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 const Page = () => {
+  const router = useRouter()
+
+  if (localStorage.getItem('user')) {
+    router.push('/')
+  }
 
   const BASE_URL = 'https://dev-diaries-9f6n.onrender.com'
 
@@ -26,7 +32,7 @@ const Page = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log("Form submitted", formik.values);
+    // console.log("Form submitted", formik.values);
 
     // validate inputs
     if (formik.values.password !== formik.values.confirmPassword) {
@@ -43,8 +49,9 @@ const Page = () => {
 
       console.log('response', response);
 
-      if (response.status === 200) {
-        alert('Account created successfully');
+      if (response.status === 200 || response.status === 201) {
+        localStorage.setItem('user', JSON.stringify(response.data));
+        router.push('/');
       }
 
     } catch (error) {
