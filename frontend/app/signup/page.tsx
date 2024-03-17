@@ -5,8 +5,11 @@ import signUpImage from '@/public/SignUpPic.svg'
 import { useFormik } from 'formik'
 import Image from 'next/image'
 import Link from 'next/link'
+import axios from 'axios'
 
 const Page = () => {
+
+  const BASE_URL = 'https://dev-diaries-9f6n.onrender.com'
 
   const formik = useFormik({
     initialValues: {
@@ -20,20 +23,54 @@ const Page = () => {
     }
   })
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log("Form submitted", formik.values);
+
+    // validate inputs
+    if (formik.values.password !== formik.values.confirmPassword) {
+      alert('Passwords do not match');
+    }
+
+    // send request to server
+    try {
+      const response = await axios.post(`${BASE_URL}/user`, {
+        name: formik.values.name,
+        email: formik.values.email,
+        password: formik.values.password
+      });
+
+      console.log('response', response);
+
+      if (response.status === 200) {
+        alert('Account created successfully');
+      }
+
+    } catch (error) {
+      console.log('error', error);
+      alert('Error creating account');
+    }
+
+  }
+
+
+
   return (
     <div className='flex lg:flex-row flex-col'>
       <div className='h-screen w-1/2 overflow-hidden lg:block hidden'>
-        <Image src={signUpImage} alt=''  className='w-full h-screen object-cover' />
+        <Image src={signUpImage} alt='' className='w-full h-screen object-cover' />
       </div>
       <div className='flex flex-col h-screen justify-center items-center lg:items-start lg:justify-start lg:pl-32 lg:pt-24 lg:w-1/2 gap-y-6'>
         <div>
           <h1 className='text-3xl'>Create an account</h1>
-          <p>Already have an Account? <Link href="/signin"  className='underline text-slate-500 hover:text-slate-900' >Login</Link></p>
+          <p>Already have an Account? <Link href="/signin" className='underline text-slate-500 hover:text-slate-900' >Login</Link></p>
         </div>
-        <form onSubmit={formik.handleSubmit} className='w-full flex flex-col gap-y-4 items-center lg:items-start'>
+        <form onSubmit={(e) => handleSubmit(e)} className='w-full flex flex-col gap-y-4 items-center lg:items-start'>
           <div className='flex flex-col w-8/12 gap-y-1'>
             <label htmlFor="name" className='text-slate-600'>Name:</label>
             <input
+              required
               id="name"
               name="name"
               type="text"
@@ -45,6 +82,7 @@ const Page = () => {
           <div className='flex flex-col w-8/12 gap-y-1'>
             <label htmlFor="email" className='text-slate-600'>Email:</label>
             <input
+              required
               id="email"
               name="email"
               type="text"
@@ -56,6 +94,7 @@ const Page = () => {
           <div className='flex flex-col w-8/12 gap-y-1'>
             <label htmlFor="password" className='text-slate-600'>Password:</label>
             <input
+              required
               id="password"
               name="password"
               type="password"
@@ -67,6 +106,7 @@ const Page = () => {
           <div className='flex flex-col w-8/12 gap-y-1'>
             <label htmlFor="confirmPassword" className='text-slate-600'>Confirm Password:</label>
             <input
+              required
               id="confirmPassword"
               name="confirmPassword"
               type="password"
